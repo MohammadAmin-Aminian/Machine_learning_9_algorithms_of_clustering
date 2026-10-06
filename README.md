@@ -18,6 +18,9 @@ Run the notebook from top to bottom. The bundled `marketing_campaign.csv` is
 quadratic methods practical; change `SAMPLE_SIZE` to `None` for the full dataset.
 The example is exploratory, not a validated customer segmentation model.
 
+Small datasets use bounded spectral graph neighborhoods and embedding dimensions,
+and OPTICS adjusts its minimum sample count to the available observations.
+
 ## Version 2 changes
 
 - Median income imputation is applied to the actual modeling data.

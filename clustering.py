@@ -66,11 +66,42 @@ def prepare_data(data, reference_year=2023):
     return data, scaled
 
 
+class AdaptiveSpectralClustering(SpectralClustering):
+    """Bound graph neighbors and embedding size by the fitted sample count."""
+
+    def fit(self, X, y=None):
+        samples = len(X)
+        if samples < 2 or self.n_clusters > samples:
+            raise ValueError(
+                "Need at least two observations and no more clusters than observations"
+            )
+        neighbors, components = self.n_neighbors, self.n_components
+        self.n_neighbors = min(neighbors, samples)
+        self.n_components = min(components or self.n_clusters, samples - 1)
+        try:
+            return super().fit(X, y)
+        finally:
+            self.n_neighbors, self.n_components = neighbors, components
+
+
+class AdaptiveOPTICS(OPTICS):
+    """Allow the tutorial's three-row minimum without oversized neighborhoods."""
+
+    def fit(self, X, y=None):
+        minimum = self.min_samples
+        if isinstance(minimum, int):
+            self.min_samples = min(minimum, len(X))
+        try:
+            return super().fit(X, y)
+        finally:
+            self.min_samples = minimum
+
+
 def models(n_clusters=3, seed=42):
     return {
         "KMeans": KMeans(n_clusters=n_clusters, n_init=10, random_state=seed),
         "Agglomerative": AgglomerativeClustering(n_clusters=n_clusters),
-        "Spectral": SpectralClustering(
+        "Spectral": AdaptiveSpectralClustering(
             n_clusters=n_clusters,
             random_state=seed,
             affinity="nearest_neighbors",
@@ -78,7 +109,7 @@ def models(n_clusters=3, seed=42):
         ),
         "DBSCAN": DBSCAN(eps=1.5, min_samples=5),
         "AffinityPropagation": AffinityPropagation(damping=0.84, random_state=seed),
-        "OPTICS": OPTICS(min_samples=5, xi=0.05, min_cluster_size=0.1),
+        "OPTICS": AdaptiveOPTICS(min_samples=5, xi=0.05, min_cluster_size=0.1),
         "GaussianMixture": GaussianMixture(n_components=n_clusters, random_state=seed),
         "MeanShift": MeanShift(),
         "Birch": Birch(n_clusters=n_clusters),

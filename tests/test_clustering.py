@@ -26,3 +26,13 @@ def test_noise_and_undefined_scores():
     assert np.isnan(summarize([[0], [1], [2]], [0, 0, 0])["silhouette"])
     assert summarize([[0], [1], [2]], [0, 0, -1])["noise"] == 1
     assert len(models()) == 9
+
+
+def test_small_dataset_spectral_and_optics():
+    for size in [3, 5, 9]:
+        features = np.random.default_rng(42).normal(size=(size, 3))
+        for name in ["Spectral", "OPTICS"]:
+            model = models()[name]
+            labels = model.fit_predict(features)
+            assert len(labels) == size
+            assert np.isfinite(labels).all()
