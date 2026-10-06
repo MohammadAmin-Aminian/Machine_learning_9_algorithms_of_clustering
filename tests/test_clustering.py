@@ -36,3 +36,20 @@ def test_small_dataset_spectral_and_optics():
             labels = model.fit_predict(features)
             assert len(labels) == size
             assert np.isfinite(labels).all()
+
+
+def test_all_nine_algorithms_on_bundled_data():
+    from pathlib import Path
+
+    source = Path(__file__).resolve().parents[1] / "marketing_campaign.csv"
+    raw = pd.read_csv(source, sep="\t").sample(n=120, random_state=42)
+    display, features = prepare_data(raw)
+    assert display.index.equals(features.index)
+    for name, model in models(seed=42).items():
+        labels = model.fit_predict(features)
+        assert labels.shape == (len(display),), name
+        assert np.isfinite(labels).all(), name
+        metrics = summarize(features, labels)
+        assert 0 <= metrics["noise"] <= len(display), name
+        if np.isfinite(metrics["silhouette"]):
+            assert -1 <= metrics["silhouette"] <= 1, name

@@ -45,3 +45,14 @@ Dataset source: [Customer Personality Analysis](https://www.kaggle.com/datasets/
 Algorithms: [scikit-learn clustering guide](https://scikit-learn.org/stable/modules/clustering.html).
 See `LICENCE.txt` for the existing project license; dataset usage follows its source terms.
 Author: Mohammad Amin Aminian.
+
+## Workflow validation
+
+`python -m pytest -q` runs all nine algorithms on a fixed 120-row sample of the
+bundled marketing dataset, checks row/label alignment and verifies silhouette
+score bounds where the score is defined. The smaller sample keeps CI practical;
+it is not a comparison of full-dataset clustering quality. Seeds control stochastic
+algorithms, but exact numerical results can vary with dependency versions.
+
+For reproducible local runs use `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python
+-m pytest -q`. See [CONTRIBUTING.md](CONTRIBUTING.md) for changes and bug reports.
