@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clustering-algorithms-tutorial"
+version = "1.0.0"
+description = "Educational comparison of nine clustering algorithms with customer and synthetic geophysical case studies"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENCE.txt"}
+authors = [{name = "Mohammad Amin Aminian"}]
+dependencies = [
+  "numpy>=1.26,<3",
+  "pandas>=2.2,<3",
+  "scikit-learn>=1.5,<2",
+  "matplotlib>=3.8,<4"
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "build>=1", "jupyter>=1,<2"]
+
+[project.scripts]
+clustering-lab = "clustering_lab:main"
+
+[project.urls]
+Repository = "https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering"
+Documentation = "https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering/blob/main/docs/GEOPHYSICAL_TUTORIAL.md"
+
+[tool.setuptools]
+py-modules = ["clustering", "clustering_lab"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
