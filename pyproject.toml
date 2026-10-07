@@ -24,8 +24,8 @@ dev = ["pytest>=8,<10", "build>=1", "jupyter>=1,<2"]
 clustering-lab = "clustering_lab:main"
 
 [project.urls]
-Repository = "https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering"
-Documentation = "https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering/blob/main/docs/GEOPHYSICAL_TUTORIAL.md"
+Repository = "https://github.com/MohammadAmin-Aminian/clustering-algorithms-tutorial"
+Documentation = "https://github.com/MohammadAmin-Aminian/clustering-algorithms-tutorial/blob/main/docs/GEOPHYSICAL_TUTORIAL.md"
 
 [tool.setuptools]
 py-modules = ["clustering", "clustering_lab"]
