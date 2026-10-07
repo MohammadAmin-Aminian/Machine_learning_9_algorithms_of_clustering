@@ -1,5 +1,7 @@
 # Clustering Algorithms — Educational Tutorial
 
+[![Regression tests](https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering/actions/workflows/tests.yml/badge.svg)](https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering/actions/workflows/tests.yml)
+
 **A teaching-oriented machine-learning project comparing nine unsupervised clustering methods on the same customer dataset.**
 
 > **Portfolio context:** This repository is an educational/tutorial project rather than a research contribution. I developed it to demonstrate and compare clustering workflows, preprocessing choices, validation, and the practical differences between common unsupervised-learning algorithms. My research software and geophysical projects are maintained separately on my GitHub profile.
