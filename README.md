@@ -66,6 +66,12 @@ Reference: [scikit-learn clustering documentation](https://scikit-learn.org/stab
 
 See `LICENCE.txt` for the existing project license; dataset usage follows its source terms.
 
-**Author:** Mohammad Amin Aminian
+## Provenance and license
+
+This repository is maintained as an educational adaptation/tutorial project. The existing MIT license in `LICENCE.txt` credits **Mohamadhasan Sarvandani** as the original copyright holder. That attribution is preserved.
+
+The current repository adds reproducibility, preprocessing corrections, validation, documentation and test coverage. It should therefore be read as a maintained teaching adaptation rather than a claim of sole authorship of all original material.
+
+**Maintainer:** Mohammad Amin Aminian
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development and bug reports.
