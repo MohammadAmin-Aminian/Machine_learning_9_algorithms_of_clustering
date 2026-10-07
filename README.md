@@ -1,6 +1,6 @@
 # Clustering Algorithms Tutorial
 
-[![Regression tests](https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering/actions/workflows/tests.yml/badge.svg)](https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering/actions/workflows/tests.yml)
+[![Regression tests](https://github.com/MohammadAmin-Aminian/clustering-algorithms-tutorial/actions/workflows/tests.yml/badge.svg)](https://github.com/MohammadAmin-Aminian/clustering-algorithms-tutorial/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENCE.txt)
 
 **A reproducible teaching project comparing nine unsupervised clustering algorithms across two case studies: customer segmentation and a synthetic geophysical feature lab.**
@@ -82,8 +82,8 @@ The synthetic classes are didactic constructs, not validated earthquake/noise/in
 Python 3.10 or newer:
 
 ```bash
-git clone https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering.git
-cd Machine_learning_9_algorithms_of_clustering
+git clone https://github.com/MohammadAmin-Aminian/clustering-algorithms-tutorial.git
+cd clustering-algorithms-tutorial
 python -m pip install -e '.[dev]'
 python -m pytest -q
 ```
@@ -230,9 +230,9 @@ Original additions in this fork include the reproducibility/test infrastructure 
 This tutorial is separate from the research-software portfolio. For original geophysical research software, see:
 
 - [ComPy](https://github.com/MohammadAmin-Aminian/ComPy) — seafloor compliance processing, DPG calibration and inversion.
-- [OBS Transient Cleaner](https://github.com/MohammadAmin-Aminian/Transients) — periodic OBS transient removal.
-- [ComPy Inversion Tuner](https://github.com/MohammadAmin-Aminian/Optimization) — inversion-control optimization.
-- [RHUM-RUM Geospatial Mapper](https://github.com/MohammadAmin-Aminian/Map) — OBS/bathymetry/tectonic mapping.
+- [OBS Transient Cleaner](https://github.com/MohammadAmin-Aminian/obs-transient-cleaner) — periodic OBS transient removal.
+- [ComPy Inversion Tuner](https://github.com/MohammadAmin-Aminian/compy-inversion-tuner) — inversion-control optimization.
+- [RHUM-RUM Geospatial Mapper](https://github.com/MohammadAmin-Aminian/rhum-rum-geospatial-mapper) — OBS/bathymetry/tectonic mapping.
 - [VRE Seismic Enhancement](https://github.com/MohammadAmin-Aminian/vre-seismic-enhancement) — seismic-resolution enhancement.
 - [Gabor Seismic Filter](https://github.com/MohammadAmin-Aminian/gabor-seismic-filter) — orientation-selective seismic filtering.
 
