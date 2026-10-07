@@ -1,8 +1,24 @@
-# Nine clustering algorithms — version 2
+# Clustering Algorithms — Educational Tutorial
 
-A reproducible customer-segmentation tutorial comparing K-means, agglomerative,
-spectral, DBSCAN, affinity propagation, OPTICS, Gaussian mixtures, mean shift,
-and BIRCH. All methods now use the same standardized feature matrix.
+**A teaching-oriented machine-learning project comparing nine unsupervised clustering methods on the same customer dataset.**
+
+> **Portfolio context:** This repository is an educational/tutorial project rather than a research contribution. I developed it to demonstrate and compare clustering workflows, preprocessing choices, validation, and the practical differences between common unsupervised-learning algorithms. My research software and geophysical projects are maintained separately on my GitHub profile.
+
+## Learning objectives
+
+The notebook provides a reproducible comparison of:
+
+- K-means
+- Agglomerative clustering
+- Spectral clustering
+- DBSCAN
+- Affinity propagation
+- OPTICS
+- Gaussian mixture models
+- Mean shift
+- BIRCH
+
+The goal is to show how different clustering families behave when applied to the **same standardized feature matrix**, and to illustrate important practical issues such as categorical encoding, scaling, noise labels, stochastic reproducibility, and silhouette-score limitations.
 
 ## Run
 
@@ -13,46 +29,43 @@ python -m pip install -r requirements.txt
 jupyter notebook clustering_algo.ipynb
 ```
 
-Run the notebook from top to bottom. The bundled `marketing_campaign.csv` is
- tab-separated. The notebook defaults to a deterministic 400-row subset to keep
-quadratic methods practical; change `SAMPLE_SIZE` to `None` for the full dataset.
-The example is exploratory, not a validated customer segmentation model.
+Run the notebook from top to bottom. The bundled `marketing_campaign.csv` is tab-separated. The notebook defaults to a deterministic 400-row subset to keep quadratic methods practical; change `SAMPLE_SIZE` to `None` for the full dataset.
 
-Small datasets use bounded spectral graph neighborhoods and embedding dimensions,
-and OPTICS adjusts its minimum sample count to the available observations.
+This is an **exploratory teaching example**, not a validated customer-segmentation model. Small datasets use bounded spectral graph neighborhoods and embedding dimensions, and OPTICS adjusts its minimum sample count to the available observations.
 
-## Version 2 changes
+## Implementation and reproducibility
 
-- Median income imputation is applied to the actual modeling data.
+- Median income imputation is applied to the modeling data.
 - Categorical features are one-hot encoded rather than assigned arbitrary distances.
-- Every algorithm uses identical standardized inputs; plot labels retain row alignment.
+- All algorithms use identical standardized inputs.
+- Plot labels retain row alignment.
 - Noise points are excluded from cluster counts and silhouette scores.
-- Random seeds and K-means restarts are explicit. Warnings remain visible.
-- Stale notebook outputs and misleading unrelated license badges were removed.
+- Random seeds and K-means restarts are explicit.
+- Warnings remain visible rather than being globally suppressed.
 
-Density thresholds and cluster counts are examples and should be tuned for each
-sample. Silhouette is undefined for a single cluster or all-noise result, reported
-as `NaN`. It is not evidence of scientific or business validity. Age uses the fixed
-reference year 2023 to reproduce the original analysis; this dataset predates it.
+Density thresholds and cluster counts are examples and should be tuned for each dataset. Silhouette score is undefined for a single cluster or an all-noise result and is reported as `NaN`. It should not be interpreted as evidence of scientific or business validity. Age uses the fixed reference year 2023 to reproduce the original analysis.
 
-## Tests and provenance
+## Validation
 
 ```bash
 python -m pytest -q
 ```
 
-Dataset source: [Customer Personality Analysis](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis).
-Algorithms: [scikit-learn clustering guide](https://scikit-learn.org/stable/modules/clustering.html).
+The tests run all nine algorithms on a fixed 120-row sample, check row/label alignment, and verify silhouette-score bounds where defined. The smaller sample keeps CI practical; it is not intended as a full-dataset benchmark.
+
+For more reproducible local numerical behavior:
+
+```bash
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m pytest -q
+```
+
+## Data and references
+
+Dataset: [Customer Personality Analysis](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis)  
+Reference: [scikit-learn clustering documentation](https://scikit-learn.org/stable/modules/clustering.html)
+
 See `LICENCE.txt` for the existing project license; dataset usage follows its source terms.
-Author: Mohammad Amin Aminian.
 
-## Workflow validation
+**Author:** Mohammad Amin Aminian
 
-`python -m pytest -q` runs all nine algorithms on a fixed 120-row sample of the
-bundled marketing dataset, checks row/label alignment and verifies silhouette
-score bounds where the score is defined. The smaller sample keeps CI practical;
-it is not a comparison of full-dataset clustering quality. Seeds control stochastic
-algorithms, but exact numerical results can vary with dependency versions.
-
-For reproducible local runs use `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python
--m pytest -q`. See [CONTRIBUTING.md](CONTRIBUTING.md) for changes and bug reports.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development and bug reports.
