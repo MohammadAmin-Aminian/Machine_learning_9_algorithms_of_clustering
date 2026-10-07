@@ -4,7 +4,7 @@
 
 **A teaching-oriented machine-learning project comparing nine unsupervised clustering methods on the same customer dataset.**
 
-> **Portfolio context:** This repository is an educational/tutorial project rather than a research contribution. I developed it to demonstrate and compare clustering workflows, preprocessing choices, validation, and the practical differences between common unsupervised-learning algorithms. My research software and geophysical projects are maintained separately on my GitHub profile.
+> **Portfolio context:** This repository is an educational/tutorial project rather than a research contribution. I developed it to demonstrate and compare clustering workflows, preprocessing choices, validation, and the practical differences between common unsupervised-learning algorithms. My research software and geophysical projects are maintained separately, led by [ComPy](https://github.com/MohammadAmin-Aminian/ComPy) and the associated OBS/seismic-processing repositories.
 
 ## Learning objectives
 
