@@ -1,79 +1,239 @@
-# Clustering Algorithms — Educational Tutorial
+# Clustering Algorithms Tutorial
 
 [![Regression tests](https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering/actions/workflows/tests.yml/badge.svg)](https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering/actions/workflows/tests.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENCE.txt)
 
-**A teaching-oriented machine-learning project comparing nine unsupervised clustering methods on the same customer dataset.**
+**A reproducible teaching project comparing nine unsupervised clustering algorithms across two case studies: customer segmentation and a synthetic geophysical feature lab.**
 
-> **Portfolio context:** This repository is an educational/tutorial project rather than a research contribution. I developed it to demonstrate and compare clustering workflows, preprocessing choices, validation, and the practical differences between common unsupervised-learning algorithms. My research software and geophysical projects are maintained separately, led by [ComPy](https://github.com/MohammadAmin-Aminian/ComPy) and the associated OBS/seismic-processing repositories.
+> **Provenance:** this repository is a fork and educational extension. The original MIT license credits **Mohamadhasan Sarvandani (2023)**. That attribution is preserved. The current repository adds reproducible preprocessing, tests/CI, corrected evaluation, package/CLI support, and an original synthetic geophysical clustering exercise. See [NOTICE.md](NOTICE.md).
 
-## Learning objectives
+## Why this repository exists
 
-The notebook provides a reproducible comparison of:
+Clustering tutorials often show several algorithms without explaining why they disagree, how preprocessing changes the geometry, or how to evaluate an unsupervised result responsibly.
 
-- K-means
-- Agglomerative clustering
-- Spectral clustering
-- DBSCAN
-- Affinity propagation
-- OPTICS
-- Gaussian mixture models
-- Mean shift
-- BIRCH
+This project uses the **same nine algorithms** in controlled workflows so that students can compare:
 
-The goal is to show how different clustering families behave when applied to the **same standardized feature matrix**, and to illustrate important practical issues such as categorical encoding, scaling, noise labels, stochastic reproducibility, and silhouette-score limitations.
+- centroid-based clustering;
+- hierarchical clustering;
+- graph-based clustering;
+- density-based clustering;
+- probabilistic mixture models;
+- mode-seeking methods;
+- scalable tree-based clustering.
 
-## Run
+The emphasis is not “which algorithm wins?” but **what assumptions each method makes, what failure modes look like, and what an evaluation metric can and cannot establish**.
+
+## Algorithms
+
+| Family | Algorithm |
+|---|---|
+| Centroid | K-means |
+| Hierarchical | Agglomerative clustering |
+| Graph | Spectral clustering |
+| Density | DBSCAN |
+| Message passing | Affinity propagation |
+| Density / reachability | OPTICS |
+| Probabilistic | Gaussian mixture model |
+| Mode seeking | Mean shift |
+| Hierarchical / scalable | BIRCH |
+
+## Two learning tracks
+
+### 1. Customer-segmentation tutorial
+
+The original customer dataset is retained as a familiar entry point. The maintained workflow now includes:
+
+- median imputation for missing income;
+- explicit one-hot encoding for categorical variables;
+- shared standardized inputs across algorithms;
+- deterministic random seeds;
+- bounded spectral-neighbor behaviour on small datasets;
+- adaptive OPTICS minimum-sample handling;
+- explicit density-method noise accounting;
+- silhouette scores only when mathematically defined;
+- regression tests across all nine methods.
+
+This remains an **exploratory educational example**, not a validated business segmentation model.
+
+### 2. Synthetic geophysical clustering lab
+
+The repository now includes an original teaching exercise in [`clustering_lab.py`](clustering_lab.py) and [`docs/GEOPHYSICAL_TUTORIAL.md`](docs/GEOPHYSICAL_TUTORIAL.md).
+
+It generates a labelled synthetic feature set inspired by seismic/OBS signal analysis:
+
+- dominant frequency;
+- spectral slope;
+- RMS amplitude;
+- vertical/pressure coherence.
+
+Three deliberately separated populations are generated. Because their true generating labels are known, students can compare normal unsupervised metrics with **Adjusted Rand Index (ARI)**.
+
+This allows an important distinction:
+
+- **silhouette score** asks whether clusters are geometrically compact/separated;
+- **ARI** asks whether a clustering recovered the known synthetic classes.
+
+Real field data usually do **not** provide such ground truth.
+
+The synthetic classes are didactic constructs, not validated earthquake/noise/infragravity classifiers.
+
+## Quick start
+
+Python 3.10 or newer:
 
 ```bash
 git clone https://github.com/MohammadAmin-Aminian/Machine_learning_9_algorithms_of_clustering.git
 cd Machine_learning_9_algorithms_of_clustering
-python -m pip install -r requirements.txt
-jupyter notebook clustering_algo.ipynb
-```
-
-Run the notebook from top to bottom. The bundled `marketing_campaign.csv` is tab-separated. The notebook defaults to a deterministic 400-row subset to keep quadratic methods practical; change `SAMPLE_SIZE` to `None` for the full dataset.
-
-This is an **exploratory teaching example**, not a validated customer-segmentation model. Small datasets use bounded spectral graph neighborhoods and embedding dimensions, and OPTICS adjusts its minimum sample count to the available observations.
-
-## Implementation and reproducibility
-
-- Median income imputation is applied to the modeling data.
-- Categorical features are one-hot encoded rather than assigned arbitrary distances.
-- All algorithms use identical standardized inputs.
-- Plot labels retain row alignment.
-- Noise points are excluded from cluster counts and silhouette scores.
-- Random seeds and K-means restarts are explicit.
-- Warnings remain visible rather than being globally suppressed.
-
-Density thresholds and cluster counts are examples and should be tuned for each dataset. Silhouette score is undefined for a single cluster or an all-noise result and is reported as `NaN`. It should not be interpreted as evidence of scientific or business validity. Age uses the fixed reference year 2023 to reproduce the original analysis.
-
-## Validation
-
-```bash
+python -m pip install -e '.[dev]'
 python -m pytest -q
 ```
 
-The tests run all nine algorithms on a fixed 120-row sample, check row/label alignment, and verify silhouette-score bounds where defined. The smaller sample keeps CI practical; it is not intended as a full-dataset benchmark.
+### Run the geophysical lab
 
-For more reproducible local numerical behavior:
+```bash
+clustering-lab
+```
+
+Example with a CSV report:
+
+```bash
+clustering-lab \
+    --samples-per-class 120 \
+    --seed 42 \
+    --output results/geophysical_benchmark.csv
+```
+
+The table reports:
+
+- recovered cluster count;
+- number of points labelled as noise;
+- silhouette score;
+- Adjusted Rand Index against the known synthetic labels.
+
+Existing output files are never silently overwritten.
+
+### Run the customer notebook
+
+```bash
+jupyter notebook clustering_algo.ipynb
+```
+
+The notebook defaults to a deterministic subset to keep quadratic methods practical.
+
+## Core Python API
+
+```python
+from clustering import models, prepare_data, summarize
+from clustering_lab import (
+    benchmark_geophysical_models,
+    synthetic_seismic_features,
+)
+
+features, truth = synthetic_seismic_features(samples_per_class=120, seed=42)
+results = benchmark_geophysical_models(samples_per_class=120, seed=42)
+print(results)
+```
+
+## Reproducibility
+
+The maintained implementation makes stochastic choices explicit and keeps preprocessing shared across algorithms.
+
+For deterministic local numerical behaviour where BLAS threading may matter:
 
 ```bash
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m pytest -q
 ```
 
+GitHub Actions:
+
+1. installs the repository as a package;
+2. runs the complete test suite;
+3. executes the geophysical CLI;
+4. builds source and wheel distributions.
+
+## Validation
+
+Tests cover:
+
+- missing-value imputation and row alignment;
+- categorical one-hot encoding;
+- all-noise and single-cluster edge cases;
+- bounded Spectral/OPTICS behaviour on small datasets;
+- all nine algorithms on the bundled customer data;
+- reproducibility of the synthetic geophysical dataset;
+- physical bounds of generated frequency/amplitude/coherence features;
+- all nine algorithms on the geophysical exercise;
+- ARI validity and recovery of at least one strongly separated synthetic partition.
+
+Run:
+
+```bash
+python -m pytest -q
+```
+
+## Teaching questions
+
+The geophysical lab is designed to support questions such as:
+
+1. Why does standardization matter for distance-based clustering?
+2. Why can DBSCAN call physically plausible observations “noise”?
+3. Why can silhouette and ARI rank algorithms differently?
+4. What happens when cluster populations overlap?
+5. What happens when an irrelevant high-variance feature is added?
+6. Why does success on a synthetic labelled dataset not imply field-data validity?
+
+More exercises are in [`docs/GEOPHYSICAL_TUTORIAL.md`](docs/GEOPHYSICAL_TUTORIAL.md).
+
+## Scientific and statistical limitations
+
+- Clustering does not create physical labels by itself.
+- Silhouette score measures geometric separation, not scientific truth.
+- ARI is only available here because the synthetic generator provides known labels.
+- Hyperparameters such as DBSCAN `eps` are dataset-dependent.
+- Different algorithms encode different notions of a “cluster.”
+- Results from synthetic data cannot be promoted to an operational seismic classifier without independently labelled validation data.
+
+## Repository structure
+
+```text
+clustering.py                    maintained nine-algorithm implementation
+clustering_lab.py                original synthetic geophysical teaching lab
+clustering_algo.ipynb            customer-segmentation notebook
+marketing_campaign.csv           tutorial dataset
+docs/GEOPHYSICAL_TUTORIAL.md     teaching notes and exercises
+tests/                           customer + geophysical regression tests
+pyproject.toml                   installable package and CLI metadata
+NOTICE.md                        fork provenance and added-work summary
+LICENCE.txt                      preserved MIT license
+```
+
 ## Data and references
 
-Dataset: [Customer Personality Analysis](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis)  
-Reference: [scikit-learn clustering documentation](https://scikit-learn.org/stable/modules/clustering.html)
+Customer dataset: [Customer Personality Analysis](https://www.kaggle.com/datasets/imakash3011/customer-personality-analysis)
 
-See `LICENCE.txt` for the existing project license; dataset usage follows its source terms.
+General method reference: [scikit-learn clustering documentation](https://scikit-learn.org/stable/modules/clustering.html)
 
-## Provenance and license
+Dataset use remains subject to the source dataset's own terms.
 
-This repository is maintained as an educational adaptation/tutorial project. The existing MIT license in `LICENCE.txt` credits **Mohamadhasan Sarvandani** as the original copyright holder. That attribution is preserved.
+## Provenance and authorship
 
-The current repository adds reproducibility, preprocessing corrections, validation, documentation and test coverage. It should therefore be read as a maintained teaching adaptation rather than a claim of sole authorship of all original material.
+The repository remains visibly and intentionally a **fork**.
 
-**Maintainer:** Mohammad Amin Aminian
+The existing MIT license credits **Mohamadhasan Sarvandani** as the original copyright holder. It has not been replaced or obscured.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development and bug reports.
+**Maintained educational extension:** Mohammad Amin Aminian
+
+Original additions in this fork include the reproducibility/test infrastructure and the synthetic geophysical clustering lab. See [NOTICE.md](NOTICE.md) for a concise change/provenance record.
+
+## Related research software
+
+This tutorial is separate from the research-software portfolio. For original geophysical research software, see:
+
+- [ComPy](https://github.com/MohammadAmin-Aminian/ComPy) — seafloor compliance processing, DPG calibration and inversion.
+- [OBS Transient Cleaner](https://github.com/MohammadAmin-Aminian/Transients) — periodic OBS transient removal.
+- [ComPy Inversion Tuner](https://github.com/MohammadAmin-Aminian/Optimization) — inversion-control optimization.
+- [RHUM-RUM Geospatial Mapper](https://github.com/MohammadAmin-Aminian/Map) — OBS/bathymetry/tectonic mapping.
+- [VRE Seismic Enhancement](https://github.com/MohammadAmin-Aminian/vre-seismic-enhancement) — seismic-resolution enhancement.
+- [Gabor Seismic Filter](https://github.com/MohammadAmin-Aminian/gabor-seismic-filter) — orientation-selective seismic filtering.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the development and validation workflow.
